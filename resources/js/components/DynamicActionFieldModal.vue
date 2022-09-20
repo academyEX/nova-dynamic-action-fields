@@ -1,27 +1,30 @@
 <template>
-  <confirm-action-modal
-    v-if="dynamicAction"
-    v-bind="{ working, resourceName, selectedResources, errors }"
-    :action="dynamicAction"
-    @confirm="$emit('confirm')"
-    @close="$emit('close')"
+  <ConfirmActionModal
+      v-if="dynamicAction"
+      v-bind="{ working, resourceName, selectedResources, errors }"
+      :action="dynamicAction"
+      @confirm="$emit('confirm')"
+      @close="$emit('close')"
   />
-  <modal
-    v-else
-    tabindex="-1"
-    role="dialog"
-    @click.native="$emit('close')"
+  <Modal
+      v-else
+      tabindex="-1"
+      role="dialog"
+      @click.native="$emit('close')"
   >
     <div
-      class="flex items-center justify-center z-50 p-6"
-      style="min-height: 150px"
+        class="flex items-center justify-center z-50 p-6"
+        style="min-height: 150px"
     >
-      <loader class="text-60" />
+      <Loader class="text-60" />
     </div>
-  </modal>
+  </Modal>
 </template>
 
 <script>
+function fetchDynamicActionFields(url, param) {
+  return window.Nova.request().get(url, param)
+}
 export default {
   name: 'dynamic-action-field-modal',
 
@@ -42,7 +45,7 @@ export default {
   methods: {
     loadAction() {
       this.dynamicAction = null;
-      window.axios.get(`/nova-vendor/dynamic-action-fields/actions/${this.resourceName}/dynamic-fields`, {
+      fetchDynamicActionFields(`/nova-vendor/dynamic-action-fields/actions/${this.resourceName}/dynamic-fields`, {
         params: {
           resources: Array.isArray(this.selectedResources) ? this.selectedResources.join(',') : this.selectedResources,
           action: this.action.uriKey,

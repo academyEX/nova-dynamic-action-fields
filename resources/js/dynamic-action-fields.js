@@ -1,3 +1,5 @@
-Nova.booting((Vue, router, store) => {
-  Vue.component('dynamic-action-field-modal', require('./components/DynamicActionFieldModal.vue'))
+import DynamicActionFieldModal from './components/DynamicActionFieldModal'
+
+Nova.booting((app, store) => {
+  app.component('dynamic-action-field-modal', DynamicActionFieldModal)
 })
